@@ -32,27 +32,36 @@ public class Tree_height {
 			FastScanner in = new FastScanner();
 			n = in.nextInt();
 			parent = new int[n];
+			heights = new int[n];
 			for (int i = 0; i < n; i++) {
 				parent[i] = in.nextInt();
 			}
 		}
 
 		int computeHeight() {
-//			for (int i = 0; i < n; i++) {
-//				heights[i] =getHeight(i);
-//			}
+			for (int i = 0; i < n; i++) {
+				getHeight(i, parent, heights);
+			}
 			int result = 0;
-			for(int i = 0; i < n; i++) {
-				result = Math.max(result, getHeight(i));
+			for (int i = 0; i < n; i++) {
+				result = Math.max(result, heights[i]);
 			}
 			return result;
 		}
 
-		int getHeight(int index) {
-			if(parent[index] == -1) {
-				return 1;
+		void getHeight(int index, int parent[], int heights[]) {
+			if (heights[index] != 0) {
+				return;
 			}
-			return getHeight(parent[index]) + 1;
+			if (parent[index] == -1) {
+				heights[index] = 1;
+				return;
+			}
+			if (heights[index] == 0) {
+				getHeight(parent[index], parent, heights);
+			}
+
+			heights[index] = heights[parent[index]] + 1;
 		}
 	}
 
