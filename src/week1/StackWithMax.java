@@ -3,10 +3,37 @@ package week1;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class StackWithMax {
+	// main stack
+	static Stack<Integer> mainStack = new Stack<Integer>();
+
+	// Stack to keep track of max element
+	static Stack<Integer> trackStack = new Stack<Integer>();
+
+	static void push(int x) {
+		mainStack.push(x);
+		if (mainStack.size() == 1) {
+			trackStack.push(x);
+			return;
+		}
+		if (x > trackStack.peek())
+			trackStack.push(x);
+		else
+			trackStack.push(trackStack.peek());
+	}
+
+	static int getMax() {
+		return trackStack.peek();
+	}
+
+	static void pop() {
+		mainStack.pop();
+		trackStack.pop();
+	}
+
 	class FastScanner {
 		StringTokenizer tok = new StringTokenizer("");
 		BufferedReader in;
@@ -24,22 +51,22 @@ public class StackWithMax {
 		int nextInt() throws IOException {
 			return Integer.parseInt(next());
 		}
+
 	}
 
 	public void solve() throws IOException {
 		FastScanner scanner = new FastScanner();
 		int queries = scanner.nextInt();
-		MyStack stack = new MyStack();
 
 		for (int qi = 0; qi < queries; ++qi) {
 			String operation = scanner.next();
 			if ("push".equals(operation)) {
 				int value = scanner.nextInt();
-				stack.myPush(value);
+				StackWithMax.push(value);
 			} else if ("pop".equals(operation)) {
-				stack.myPop();
+				StackWithMax.pop();
 			} else if ("max".equals(operation)) {
-				System.out.println(stack.getMax());
+				System.out.println(StackWithMax.getMax());
 			}
 		}
 	}
@@ -48,24 +75,4 @@ public class StackWithMax {
 		new StackWithMax().solve();
 	}
 
-	public class MyStack {
-		int maxValues[] = new int[400000];
-		int index = 0;
-
-		void myPush(int value) {
-			maxValues[index] = value;
-			index++;
-		}
-
-		void myPop() {
-			index--;
-			maxValues[index] = 0;
-		}
-
-		int getMax() {
-			int[] filteredArray = Arrays.stream(maxValues).filter(num -> num != 0).toArray();
-			Arrays.sort(filteredArray);
-			return filteredArray.length == 0 ? 0 : filteredArray[filteredArray.length - 1];
-		}
-	}
 }
