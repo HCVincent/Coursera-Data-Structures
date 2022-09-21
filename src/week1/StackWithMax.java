@@ -63,9 +63,9 @@ public class StackWithMax {
 		}
 
 		int getMax() {
-			int copy[] = maxValues.clone();
-			Arrays.sort(copy);
-			return copy[399999];
+			int[] filteredArray = Arrays.stream(maxValues).filter(num -> num != 0).toArray();
+			Arrays.sort(filteredArray);
+			return filteredArray.length == 0 ? 0 : filteredArray[filteredArray.length - 1];
 		}
 	}
 }
