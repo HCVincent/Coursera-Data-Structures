@@ -3,7 +3,8 @@ package week1;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class Max_sliding_window {
@@ -22,33 +23,22 @@ public class Max_sliding_window {
 		}
 	}
 
+
 	public static int[] maxSlidingWindow(int[] arr, int k) {
-
-		// For Finding Next Greater Element
-		int[] nge = new int[arr.length];
-		Stack<Integer> st = new Stack<>();
-		st.push(arr.length - 1);
-		nge[arr.length - 1] = arr.length;
-		for (int i = arr.length - 2; i >= 0; --i) {
-			while (!st.isEmpty() && arr[i] >= arr[st.peek()])
-				st.pop();
-			if (st.isEmpty())
-				nge[i] = arr.length;
-			else
-				nge[i] = st.peek();
-			st.push(i);
-		}
-
 		int[] ans = new int[arr.length - k + 1];
-		int j = 0; // To travel in nge
-		for (int i = 0; i <= arr.length - k; ++i) {
-			if (j < i)
-				j = i;
-			while (nge[j] < i + k)
-				j = nge[j];
-			ans[i] = arr[j];
+		Deque<Integer> q = new LinkedList<>();
+		for (int i = 0; i < arr.length; i++) {
+			while (q.size() > 0 && arr[i] >= arr[q.getLast()]) {
+				q.removeLast();
+			}
+			q.addLast(i);
+			if (i - k + 1 >= 0) {
+				ans[i - k + 1] = arr[q.getFirst()];
+			}
+			if(i - k + 1 >= q.getFirst()) {
+				q.removeFirst();
+			}
 		}
-
 		return ans;
 	}
 
