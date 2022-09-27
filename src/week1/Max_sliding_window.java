@@ -23,7 +23,6 @@ public class Max_sliding_window {
 		}
 	}
 
-	//TEST
 	public static int[] maxSlidingWindow(int[] arr, int k) {
 		int[] ans = new int[arr.length - k + 1];
 		Deque<Integer> q = new LinkedList<>();
